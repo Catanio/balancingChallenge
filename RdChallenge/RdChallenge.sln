@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdChallenge", "RdChallenge.csproj", "{8D438D2B-89D7-45F5-97BD-359C889213CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalancingTests", "..\BalancingTests\BalancingTests.csproj", "{351609B9-7AF6-49E9-B2B6-1B5F2084FD32}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D438D2B-89D7-45F5-97BD-359C889213CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D438D2B-89D7-45F5-97BD-359C889213CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D438D2B-89D7-45F5-97BD-359C889213CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D438D2B-89D7-45F5-97BD-359C889213CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{351609B9-7AF6-49E9-B2B6-1B5F2084FD32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{351609B9-7AF6-49E9-B2B6-1B5F2084FD32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{351609B9-7AF6-49E9-B2B6-1B5F2084FD32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{351609B9-7AF6-49E9-B2B6-1B5F2084FD32}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5FDD81C-C16F-47B7-8DF2-86878C9D848E}
+	EndGlobalSection
+EndGlobal
