@@ -55,7 +55,7 @@ namespace BalancingTests
         [TestMethod]
         public void Scenario_5()
         {
-            // should this throw an error? premisse says that all managers have different levels
+            // ERROR: should this throw an error? premisse says that all managers have different levels
             var css = SuccessManager.mapEntities(new[] { 100, 2, 3, 3, 4, 5 });
             var customers = Customer.mapEntities(new[] { 10, 10, 10, 20, 20, 30, 30, 30, 20, 60 });
             var csAway = new List<int> { };
@@ -83,34 +83,80 @@ namespace BalancingTests
             Assert.AreEqual(3, customerSuccessBalancing(css, customers, csAway));
         }
 
-        int customerSuccessBalancing(List<SuccessManager> SuccessManagers, List<Customer> customers, List<int> csAway)
+        int customerSuccessBalancing(List<SuccessManager> successManagers, List<Customer> customers, List<int> csAway)
         {
+            /*
+             * Premissas que vão contra os testes unitários
+             */
+            // Teste 3
+
+            // Teste 5
+            //throw new Exception("Todos os CSs têm níveis diferentes");
+            
+            
+            if (successManagers.Count > 1000)
+                throw new Exception("O número de CSs deve estar entre 0 e 1.000");
+
+            if (customers.Count > 1000000) 
+                throw new Exception("O número de Clientes deve estar entre 0 e 1.000.000");
+
+            if (successManagers.Max(manager => manager.Id) > 1000 || successManagers.Exists(manager => manager.Id < 0))
+                throw new Exception("os Ids dos CSs devem estar entre 0 e 1.000");
+
+            if (customers.Max(Customer => Customer.Id) > 1000000 || customers.Exists(customer => customer.Id < 0))
+                throw new Exception("Os Ids do cliente devem estar entre 0 e 1.000.000");
+
+            if (successManagers.Max(manager => manager.Score) > 10000 || successManagers.Exists(manager => manager.Score < 0))
+                throw new Exception("O nível do cs deve estar entre 0 e 10.000");
+
+            if (customers.Max(Customer => Customer.Score) > 100000 || customers.Exists(customer => customer.Score < 0))
+                throw new Exception("O tamanho do cliente deve estar entre 0 e 100.000");
+            
+            //if()
+
+            // TODO: (improvement) make an attribute "away" or copy list so the original one is unaffected
             foreach (var csAwayId in csAway)
-                SuccessManagers.Remove(SuccessManagers.Find(x => x.Id == csAwayId));
+                successManagers.Remove(successManagers.Find(x => x.Id == csAwayId));
 
-            SuccessManagers = SuccessManagers.OrderByDescending(manager => manager.Score).ToList();
+            successManagers = successManagers.OrderBy(manager => manager.Score).ToList();
+            customers = customers.OrderBy(manager => manager.Score).ToList();
 
-            foreach (var customer in customers)
+            Stack<SuccessManager> managerStack = new Stack<SuccessManager>(successManagers);
+            Stack<Customer> customerStack = new Stack<Customer>(customers);
+
+            SuccessManager lastValidManager = null;
+            while (customerStack.Count > 0)
             {
-                var chosenManager = SuccessManagers[0];
+                var customer = customerStack.Pop();
 
-                // the highest successManager isn't enough
-                if (customer.Score > chosenManager.Score)
-                    continue;
+                // TODO: Improve logic readability
+                // Trivial case / border case
+                if (managerStack.Count > 0 && managerStack.Peek().Score < customer.Score)
+                    if (lastValidManager is null || (lastValidManager != null && lastValidManager.Score < customer.Score))
+                        break;
 
-                foreach (var manager in SuccessManagers)
-                    if (customer.Score <= manager.Score)
-                        chosenManager = manager;
+                while(managerStack.Count > 0 && managerStack.Peek().Score >= customer.Score)
+                    lastValidManager = managerStack.Pop();
 
-                chosenManager.Customers.Add(customer);
+                if (lastValidManager.Score >= customer.Score)
+                    lastValidManager.Customers.Add(customer);
+
             }
 
-            SuccessManagers = SuccessManagers.OrderByDescending(manager => manager.Customers.Count).ToList();
+            successManagers = successManagers.OrderByDescending(manager => manager.Customers.Count).ToList();
 
-            if (SuccessManagers[0].Customers.Count == SuccessManagers[1].Customers.Count)
+            var unoccupiedManagers = 0;
+            foreach(var manager in successManagers)
+                if (manager.Customers.Count == 0)
+                    unoccupiedManagers++;
+
+            if (unoccupiedManagers == (successManagers.Count / 2))
+                throw new Exception("Valor máximo de t = n / 2 arredondado para baixo");
+
+            if (successManagers[0].Customers.Count == successManagers[1].Customers.Count)
                 return 0;
 
-            return SuccessManagers[0].Id;
+            return successManagers[0].Id;
         }
     }
 }
